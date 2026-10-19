@@ -43,26 +43,16 @@
 
   /* Bühne */
   .hero { position: relative; padding: 56px 0 40px; text-align: center; }
-  #partikel { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  .orb-box { position: relative; width: min(64vw, 280px); aspect-ratio: 1; margin: 0 auto 34px; }
-  .orb-box::before { content: ''; position: absolute; inset: -30%; border-radius: 50%; background: radial-gradient(circle, rgba(194,107,76,.32), transparent 62%); filter: blur(10px); transition: transform .12s; transform: scale(var(--s, 1)); }
-  .orb { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 34% 28%, #F7D2BC 0%, #E19A7B 18%, var(--terra) 46%, #7E3A26 78%, #2A120B 100%);
-    box-shadow: inset -18px -24px 60px rgba(0,0,0,.45), inset 10px 14px 40px rgba(255,220,200,.18), 0 0 90px rgba(194,107,76,.35);
-    transform: scale(var(--s, 1)); transition: transform .08s; animation: atmen 5s ease-in-out infinite; }
-  .orb::after { content: ''; position: absolute; inset: 7%; border-radius: 50%; border: 1px solid rgba(255,230,215,.14); }
-  @keyframes atmen { 50% { filter: brightness(1.08); } }
-  .ring { position: absolute; inset: -9%; border-radius: 50%; border: 1px dashed rgba(212,132,102,.28); animation: drehen 40s linear infinite; }
-  .ring.b { inset: -18%; border-style: solid; border-color: rgba(212,132,102,.1); animation-duration: 70s; animation-direction: reverse; }
-  @keyframes drehen { to { transform: rotate(360deg); } }
+  .reel { position: relative; width: min(78vw, 330px); aspect-ratio: 9 / 16; margin: 0 auto 30px; border-radius: 34px; padding: 8px;
+    background: linear-gradient(160deg, #2A211B, #120E0B); box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 120px rgba(194,107,76,.28), inset 0 0 0 1px rgba(212,132,102,.25); }
+  .reel video { width: 100%; height: 100%; object-fit: cover; border-radius: 27px; display: block; background: #0A0805; }
+  .reel .ton { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border: 0; border-radius: 999px; cursor: pointer;
+    background: rgba(255,255,255,.94); color: #15110E; font: 600 14px Inter, sans-serif; box-shadow: 0 8px 26px rgba(0,0,0,.4); transition: opacity .3s; }
+  .reel .ton.weg { opacity: 0; pointer-events: none; }
+  .reel::after { content: ''; position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: 84px; height: 22px; border-radius: 12px; background: #000; opacity: .85; }
   .hero h1 { font-size: clamp(44px, 11vw, 92px); letter-spacing: -.05em; }
   .hero h1 span { color: var(--glow); }
   .hero p.lead { max-width: 560px; margin: 16px auto 0; color: var(--muted); font-size: clamp(16px, 4.2vw, 19px); }
-  .play { margin-top: 28px; display: inline-flex; align-items: center; gap: 12px; padding: 15px 26px; border: 0; border-radius: 999px; cursor: pointer;
-    background: linear-gradient(180deg, #D17A59, var(--terra)); color: #FFF4EC; font: 600 16px Inter, sans-serif; box-shadow: 0 10px 34px rgba(194,107,76,.38); transition: transform .15s; }
-  .play:active { transform: scale(.97); }
-  .play svg { width: 18px; height: 18px; }
-  .caption { min-height: 56px; max-width: 560px; margin: 22px auto 0; font: 400 14.5px "JetBrains Mono", monospace; color: var(--cream); opacity: .92; }
-  .caption .cursor { display: inline-block; width: 8px; height: 15px; background: var(--glow); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
 
   /* Zahlen */
   .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 26px 0 8px; }
@@ -113,7 +103,7 @@
     .bau { grid-template-columns: repeat(3, 1fr); }
     .hero { padding-top: 80px; }
   }
-  @media (prefers-reduced-motion: reduce) { .orb, .ring, .status b { animation: none; } .reveal { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .status b { animation: none; } .reveal { opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
@@ -123,14 +113,16 @@
 </div></nav>
 
 <header class="hero">
-  <canvas id="partikel"></canvas>
+
   <div class="wrap" style="position:relative">
-    <div class="orb-box" id="orbBox"><div class="ring b"></div><div class="ring"></div><div class="orb"></div></div>
+    <div class="reel" id="reel">
+      <video id="video" src="jarvis.mp4" poster="jarvis-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
+      <button class="ton" id="ton"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Jarvis hören</button>
+    </div>
     <span class="eyebrow">Persönlicher KI-Assistent</span>
     <h1>Ich bin <span>Jarvis.</span></h1>
     <p class="lead">Der persönliche Assistent von Ben-Vincent. Er hat mich selbst gebaut. Ich kenne seinen Tag, rede in Echtzeit mit ihm und steuere seinen Laptop.</p>
-    <button class="play" id="play"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg><span>Jarvis zuhören</span></button>
-    <p class="caption" id="caption"></p>
+
 
     <div class="stats" id="stats">
       <div class="stat"><b data-k="tage">–</b><span>Tage im Dienst</span></div>
@@ -187,49 +179,11 @@
 </div></footer>
 
 <script>
-  // Untertitel zur Stimme (Zeiten grob passend zur Aufnahme)
-  const SAETZE = [
-    [0.0, 'Guten Tag. Ich bin Jarvis, der persönliche KI-Assistent von Ben-Vincent.'],
-    [4.4, 'Ich wecke ihn morgens mit seinem Tagesplan,'],
-    [7.2, 'steuere seinen Laptop per Stimme, Handy und Handgeste,'],
-    [10.6, 'sehe durch die Kamera und vergesse nie eine Hausaufgabe.'],
-    [14.0, 'Gebaut hat mich Ben-Vincent selbst.'],
-    [16.2, 'Beeindruckt? Das sollten Sie sein.'],
-  ];
-  const orbBox = document.getElementById('orbBox'), cap = document.getElementById('caption'), btn = document.getElementById('play');
-  const audio = new Audio('jarvis.wav');
-  let ctx, analyser, data, raf, satz = -1;
-
-  function tippen(text) {
-    let i = 0; cap.innerHTML = '';
-    const t = setInterval(() => { i++; cap.innerHTML = text.slice(0, i) + '<span class="cursor"></span>'; if (i >= text.length) clearInterval(t); }, 18);
-  }
-  function loop() {
-    if (analyser) {
-      analyser.getByteTimeDomainData(data);
-      let sum = 0; for (const v of data) { const x = (v - 128) / 128; sum += x * x; }
-      const lvl = Math.min(1, Math.sqrt(sum / data.length) * 5);
-      orbBox.style.setProperty('--s', (1 + lvl * 0.12).toFixed(3));
-      window.__lvl = lvl;
-    }
-    const idx = SAETZE.findLastIndex(s => audio.currentTime >= s[0]);
-    if (idx !== satz && !audio.paused) { satz = idx; tippen(SAETZE[idx][1]); }
-    raf = requestAnimationFrame(loop);
-  }
-  btn.addEventListener('click', async () => {
-    if (!audio.paused) { audio.pause(); return; }
-    if (!ctx) {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      ctx = new AC(); const src = ctx.createMediaElementSource(audio);
-      analyser = ctx.createAnalyser(); analyser.fftSize = 512; data = new Uint8Array(analyser.fftSize);
-      src.connect(analyser); analyser.connect(ctx.destination);
-    }
-    await ctx.resume();
-    audio.currentTime = audio.ended ? 0 : audio.currentTime; satz = -1;
-    audio.play(); btn.querySelector('span').textContent = 'Pause';
-    cancelAnimationFrame(raf); loop();
-  });
-  audio.addEventListener('pause', () => { btn.querySelector('span').textContent = audio.ended ? 'Nochmal hören' : 'Weiter hören'; orbBox.style.setProperty('--s', 1); window.__lvl = 0; });
+  // Reel: stumm in Schleife; Tippen = Ton an, von vorn
+  const video = document.getElementById('video'), ton = document.getElementById('ton');
+  ton.addEventListener('click', () => { video.muted = false; video.loop = false; video.currentTime = 0; video.play(); ton.classList.add('weg'); });
+  video.addEventListener('click', () => { if (video.muted) ton.click(); else if (video.paused) video.play(); else video.pause(); });
+  video.addEventListener('ended', () => { video.muted = true; video.loop = true; video.play(); ton.classList.remove('weg'); });
 
   // Live-Zahlen (aktualisiert jeden Abend)
   fetch('stats.json?' + Date.now()).then(r => r.json()).then(z => {
@@ -240,26 +194,6 @@
     });
     document.getElementById('stand').textContent = 'Stand: ' + z.stand;
   }).catch(() => {});
-
-  // Partikel um die Kugel
-  const cv = document.getElementById('partikel'), g = cv.getContext('2d');
-  let W, H, P = [];
-  function groesse() { const d = devicePixelRatio || 1; W = cv.clientWidth; H = cv.clientHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); }
-  groesse(); addEventListener('resize', groesse);
-  for (let i = 0; i < 70; i++) P.push({ a: Math.random() * 6.28, r: 120 + Math.random() * 170, v: (Math.random() * .4 + .1) * (Math.random() < .5 ? -1 : 1) / 100, s: Math.random() * 1.6 + .4, o: Math.random() * .6 + .2 });
-  function zeichnen() {
-    g.clearRect(0, 0, W, H);
-    const box = orbBox.getBoundingClientRect(), hb = cv.getBoundingClientRect();
-    const cx = box.left - hb.left + box.width / 2, cy = box.top - hb.top + box.height / 2, k = box.width / 280, lvl = window.__lvl || 0;
-    for (const p of P) {
-      p.a += p.v * (1 + lvl * 6);
-      const r = p.r * k * (1 + lvl * .25);
-      g.beginPath(); g.arc(cx + Math.cos(p.a) * r, cy + Math.sin(p.a) * r * .92, p.s, 0, 6.28);
-      g.fillStyle = `rgba(232,160,128,${p.o})`; g.fill();
-    }
-    requestAnimationFrame(zeichnen);
-  }
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) zeichnen();
 
   // Abschnitte beim Scrollen einblenden
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
