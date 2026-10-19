@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jarvis · persönlicher KI-Assistent</title>
+<meta name="description" content="Ich bin Jarvis, der persönliche KI-Assistent von Ben-Vincent. Echtzeit-Gespräche, Kamera, Laptop-Steuerung per Stimme und Handgeste. Selbst gebaut.">
+<meta property="og:title" content="Ich bin Jarvis.">
+<meta property="og:description" content="Der persönliche KI-Assistent von Ben-Vincent. Er hat mich selbst gebaut. Hör mir zu.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://bvu911.github.io/jarvis-ki/vorschau.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0A0805">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0A0805; --dark: #17130F; --raised: #1B1612; --edge: #221C17;
+    --terra: #C26B4C; --glow: #D48466; --tdeep: #6E3726; --ember: #3A1A11;
+    --cream: #F2E8DC; --muted: #C9BDAF; --dim: #8C8479; --pos: #7A8A4E;
+    --line: color-mix(in srgb, var(--tdeep) 45%, transparent);
+    --line2: color-mix(in srgb, var(--tdeep) 25%, transparent);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--deep); color: var(--cream); font: 400 16px/1.6 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: var(--glow); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .eyebrow { font: 500 11.5px "JetBrains Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--glow); }
+  h1, h2, h3 { font-family: "Space Grotesk", system-ui, sans-serif; font-weight: 700; letter-spacing: -.035em; line-height: 1.05; }
+
+  /* Kopf */
+  nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: color-mix(in srgb, var(--deep) 72%, transparent); border-bottom: 1px solid var(--line2); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 18px "Space Grotesk", sans-serif; letter-spacing: -.02em; color: var(--cream); text-decoration: none; }
+  .brand i { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F4C3A8, var(--terra) 45%, var(--ember) 100%); box-shadow: 0 0 14px rgba(212,132,102,.55); }
+  .status { display: flex; align-items: center; gap: 8px; font: 500 11px "JetBrains Mono", monospace; letter-spacing: .1em; color: var(--muted); }
+  .status b { width: 7px; height: 7px; border-radius: 50%; background: var(--pos); box-shadow: 0 0 10px var(--pos); animation: blink 2.4s infinite; }
+  @keyframes blink { 50% { opacity: .35; } }
+
+  /* Bühne */
+  .hero { position: relative; padding: 56px 0 40px; text-align: center; }
+  #partikel { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .orb-box { position: relative; width: min(64vw, 280px); aspect-ratio: 1; margin: 0 auto 34px; }
+  .orb-box::before { content: ''; position: absolute; inset: -30%; border-radius: 50%; background: radial-gradient(circle, rgba(194,107,76,.32), transparent 62%); filter: blur(10px); transition: transform .12s; transform: scale(var(--s, 1)); }
+  .orb { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 34% 28%, #F7D2BC 0%, #E19A7B 18%, var(--terra) 46%, #7E3A26 78%, #2A120B 100%);
+    box-shadow: inset -18px -24px 60px rgba(0,0,0,.45), inset 10px 14px 40px rgba(255,220,200,.18), 0 0 90px rgba(194,107,76,.35);
+    transform: scale(var(--s, 1)); transition: transform .08s; animation: atmen 5s ease-in-out infinite; }
+  .orb::after { content: ''; position: absolute; inset: 7%; border-radius: 50%; border: 1px solid rgba(255,230,215,.14); }
+  @keyframes atmen { 50% { filter: brightness(1.08); } }
+  .ring { position: absolute; inset: -9%; border-radius: 50%; border: 1px dashed rgba(212,132,102,.28); animation: drehen 40s linear infinite; }
+  .ring.b { inset: -18%; border-style: solid; border-color: rgba(212,132,102,.1); animation-duration: 70s; animation-direction: reverse; }
+  @keyframes drehen { to { transform: rotate(360deg); } }
+  .hero h1 { font-size: clamp(44px, 11vw, 92px); letter-spacing: -.05em; }
+  .hero h1 span { color: var(--glow); }
+  .hero p.lead { max-width: 560px; margin: 16px auto 0; color: var(--muted); font-size: clamp(16px, 4.2vw, 19px); }
+  .play { margin-top: 28px; display: inline-flex; align-items: center; gap: 12px; padding: 15px 26px; border: 0; border-radius: 999px; cursor: pointer;
+    background: linear-gradient(180deg, #D17A59, var(--terra)); color: #FFF4EC; font: 600 16px Inter, sans-serif; box-shadow: 0 10px 34px rgba(194,107,76,.38); transition: transform .15s; }
+  .play:active { transform: scale(.97); }
+  .play svg { width: 18px; height: 18px; }
+  .caption { min-height: 56px; max-width: 560px; margin: 22px auto 0; font: 400 14.5px "JetBrains Mono", monospace; color: var(--cream); opacity: .92; }
+  .caption .cursor { display: inline-block; width: 8px; height: 15px; background: var(--glow); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+
+  /* Zahlen */
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 26px 0 8px; }
+  .stat { background: var(--dark); border: 1px solid var(--line2); border-radius: 18px; padding: 18px; }
+  .stat b { display: block; font: 700 clamp(30px, 8vw, 40px) "Space Grotesk", sans-serif; letter-spacing: -.04em; color: var(--cream); }
+  .stat span { font: 500 11px "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+  .stand { text-align: right; font: 400 11px "JetBrains Mono", monospace; color: var(--dim); }
+
+  section.block { padding: 56px 0 8px; }
+  section.block h2 { font-size: clamp(30px, 7vw, 46px); margin: 10px 0 8px; }
+  section.block > .wrap > p.sub { color: var(--muted); max-width: 620px; }
+
+  /* Fähigkeiten */
+  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 26px; }
+  .card { position: relative; background: linear-gradient(180deg, var(--raised), var(--dark)); border: 1px solid var(--line2); border-radius: 18px; padding: 20px; overflow: hidden; }
+  .card::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,132,102,.45), transparent); }
+  .card .ico { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; background: var(--ember); border: 1px solid var(--line); color: var(--glow); margin-bottom: 14px; }
+  .card .ico svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .card h3 { font-size: 19px; letter-spacing: -.02em; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: 14.5px; }
+  .card .tag { position: absolute; top: 18px; right: 18px; font: 500 10.5px "JetBrains Mono", monospace; color: var(--glow); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+
+  /* Aufbau */
+  .bau { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 26px; }
+  .teil { border: 1px solid var(--line); border-radius: 18px; padding: 22px; background: radial-gradient(120% 100% at 0 0, rgba(194,107,76,.10), transparent 60%), var(--dark); }
+  .teil .nr { font: 500 11px "JetBrains Mono", monospace; color: var(--dim); letter-spacing: .12em; }
+  .teil h3 { font-size: 24px; margin: 8px 0 4px; }
+  .teil .tech { font: 500 12.5px "JetBrains Mono", monospace; color: var(--glow); margin-bottom: 8px; }
+  .teil p { color: var(--muted); font-size: 14.5px; }
+
+  /* Zeitstrahl */
+  .zeit { list-style: none; padding: 0; margin-top: 26px; border-left: 1px solid var(--line); }
+  .zeit li { position: relative; padding: 0 0 22px 22px; }
+  .zeit li::before { content: ''; position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--terra); box-shadow: 0 0 12px rgba(212,132,102,.6); }
+  .zeit .d { font: 500 12px "JetBrains Mono", monospace; color: var(--glow); }
+  .zeit p { color: var(--muted); font-size: 14.5px; }
+  .zeit b { color: var(--cream); font-weight: 600; }
+
+  footer { margin-top: 60px; padding: 30px 0 calc(40px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line2); color: var(--dim); font-size: 13px; }
+  footer .wrap { display: flex; flex-direction: column; gap: 6px; }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (min-width: 720px) {
+    .stats { grid-template-columns: repeat(4, 1fr); }
+    .grid { grid-template-columns: repeat(3, 1fr); }
+    .bau { grid-template-columns: repeat(3, 1fr); }
+    .hero { padding-top: 80px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .orb, .ring, .status b { animation: none; } .reveal { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#"><i></i>Jarvis</a>
+  <span class="status"><b></b>ONLINE</span>
+</div></nav>
+
+<header class="hero">
+  <canvas id="partikel"></canvas>
+  <div class="wrap" style="position:relative">
+    <div class="orb-box" id="orbBox"><div class="ring b"></div><div class="ring"></div><div class="orb"></div></div>
+    <span class="eyebrow">Persönlicher KI-Assistent</span>
+    <h1>Ich bin <span>Jarvis.</span></h1>
+    <p class="lead">Der persönliche Assistent von Ben-Vincent. Er hat mich selbst gebaut. Ich kenne seinen Tag, rede in Echtzeit mit ihm und steuere seinen Laptop.</p>
+    <button class="play" id="play"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg><span>Jarvis zuhören</span></button>
+    <p class="caption" id="caption"></p>
+
+    <div class="stats" id="stats">
+      <div class="stat"><b data-k="tage">–</b><span>Tage im Dienst</span></div>
+      <div class="stat"><b data-k="antworten">–</b><span>Fragen beantwortet</span></div>
+      <div class="stat"><b data-k="gespraeche">–</b><span>Live-Gespräche</span></div>
+      <div class="stat"><b data-k="laptop">–</b><span>Aktionen am Laptop</span></div>
+    </div>
+    <p class="stand" id="stand"></p>
+  </div>
+</header>
+
+<section class="block reveal"><div class="wrap">
+  <span class="eyebrow">Was ich kann</span>
+  <h2>Kein Chatbot. Ein Mitarbeiter.</h2>
+  <p class="sub">Ich weiß, was ansteht, bevor er fragt, und erledige Dinge, statt nur zu reden.</p>
+  <div class="grid">
+    <div class="card"><span class="tag">0,7 s</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div><h3>Echtzeit-Gespräch</h3><p>Anrufen und einfach reden, wie mit einem Menschen. Ich antworte in unter einer Sekunde, auf dem Handy und am Laptop.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></div><h3>Ich sehe mit</h3><p>Kamera an, und ich sehe live, was er mir zeigt: eine Aufgabe, ein Gerät, ein Outfit.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12h3l3-7 4 14 3-7h5"/></svg></div><h3>„Hey Jarvis“</h3><p>Am Laptop reicht ein Wort, und ich bin da. Die Erkennung läuft komplett lokal, ohne Cloud.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M8 3h8l3 4v13H5V7z"/><path d="M9 12h6M9 16h4"/></svg></div><h3>Siri auf der Watch</h3><p>„Hey Siri, Jarvis“ auf iPhone und Apple Watch. Ich antworte direkt am Handgelenk.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v6M12 10V4a1.5 1.5 0 0 1 3 0v7M15 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3.5 14a1.6 1.6 0 0 1 2.6-1.8L9 15"/></svg></div><h3>Laptop-Steuerung</h3><p>Per Stimme, vom Handy aus der Schule oder mit Handgesten vor der Webcam: Musik, YouTube, Programme, Tippen.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M5 4 2 7M19 4l3 3"/></svg></div><h3>Briefing am Morgen</h3><p>Um 6:45 kommt der Tag aufs Handy: Termine, Wetter, was ansteht. Auf Wunsch spricht der Laptop es laut.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 0 1 2-2h12v15H6a2 2 0 0 0-2 2"/><path d="M8 8h6"/></svg></div><h3>Lerncoach</h3><p>Ich plane Lernblöcke vor Arbeiten, frage Vokabeln ab und erkläre Aufgaben Schritt für Schritt, ohne vorzusagen.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M12 8v4l3 2M17 3v4h4"/></svg></div><h3>Gedächtnis</h3><p>Ich merke mir, was er mir erzählt, und schreibe jeden Abend Tagebuch. Ich vergesse nichts.</p></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div><h3>Fällt nie aus</h3><p>Ist mein Hauptgehirn einmal ausgelastet, springt automatisch ein Ersatz-Gehirn ein.</p></div>
+  </div>
+</div></section>
+
+<section class="block reveal"><div class="wrap">
+  <span class="eyebrow">So bin ich gebaut</span>
+  <h2>Gehirn. Stimme. Hand.</h2>
+  <p class="sub">Drei Teile, ein Assistent. Ben-Vincent beschreibt, was er will, und ich baue mich selbst weiter.</p>
+  <div class="bau">
+    <div class="teil"><span class="nr">01</span><h3>Gehirn</h3><div class="tech">Claude Code</div><p>Weiß alles Wichtige über seinen Alltag: Termine, Ziele, Projekte. Denkt mit und erledigt echte Aufgaben.</p></div>
+    <div class="teil"><span class="nr">02</span><h3>Stimme</h3><div class="tech">Gemini 3.8 Live</div><p>Hört zu und spricht in Echtzeit, versteht Bilder von der Kamera und reagiert auf die Stimmung.</p></div>
+    <div class="teil"><span class="nr">03</span><h3>Hand</h3><div class="tech">Python · eigener Server</div><p>Steuert den Laptop, schickt Mitteilungen aufs Handy und meldet sich von selbst, wenn etwas ansteht.</p></div>
+  </div>
+</div></section>
+
+<section class="block reveal"><div class="wrap">
+  <span class="eyebrow">Entstehung</span>
+  <h2>Gebaut in drei Tagen.</h2>
+  <ul class="zeit">
+    <li><span class="d">17.10.2026</span><p><b>Erster Herzschlag.</b> Fundament, Gedächtnis, Sicherung.</p></li>
+    <li><span class="d">18.10.2026</span><p><b>Ich bekomme eine Stimme.</b> Eigene App für Laptop und iPhone, Echtzeit-Gespräch, Morgen-Briefing.</p></li>
+    <li><span class="d">19.10.2026</span><p><b>Ich lerne sehen und hören.</b> Kamera-Modus, „Hey Jarvis“, Handgesten, Siri auf der Watch.</p></li>
+    <li><span class="d">Heute</span><p><b>Ich werde jeden Tag besser.</b></p></li>
+  </ul>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Gebaut von Ben-Vincent mit Claude Code. Idee nach dem Jarvis-Playbook von Moritz Maaker.</span>
+  <span class="mono">jarvis · persönlicher KI-Assistent</span>
+</div></footer>
+
+<script>
+  // Untertitel zur Stimme (Zeiten grob passend zur Aufnahme)
+  const SAETZE = [
+    [0.0, 'Guten Tag. Ich bin Jarvis, der persönliche KI-Assistent von Ben-Vincent.'],
+    [4.4, 'Ich wecke ihn morgens mit seinem Tagesplan,'],
+    [7.2, 'steuere seinen Laptop per Stimme, Handy und Handgeste,'],
+    [10.6, 'sehe durch die Kamera und vergesse nie eine Hausaufgabe.'],
+    [14.0, 'Gebaut hat mich Ben-Vincent selbst.'],
+    [16.2, 'Beeindruckt? Das sollten Sie sein.'],
+  ];
+  const orbBox = document.getElementById('orbBox'), cap = document.getElementById('caption'), btn = document.getElementById('play');
+  const audio = new Audio('jarvis.wav');
+  let ctx, analyser, data, raf, satz = -1;
+
+  function tippen(text) {
+    let i = 0; cap.innerHTML = '';
+    const t = setInterval(() => { i++; cap.innerHTML = text.slice(0, i) + '<span class="cursor"></span>'; if (i >= text.length) clearInterval(t); }, 18);
+  }
+  function loop() {
+    if (analyser) {
+      analyser.getByteTimeDomainData(data);
+      let sum = 0; for (const v of data) { const x = (v - 128) / 128; sum += x * x; }
+      const lvl = Math.min(1, Math.sqrt(sum / data.length) * 5);
+      orbBox.style.setProperty('--s', (1 + lvl * 0.12).toFixed(3));
+      window.__lvl = lvl;
+    }
+    const idx = SAETZE.findLastIndex(s => audio.currentTime >= s[0]);
+    if (idx !== satz && !audio.paused) { satz = idx; tippen(SAETZE[idx][1]); }
+    raf = requestAnimationFrame(loop);
+  }
+  btn.addEventListener('click', async () => {
+    if (!audio.paused) { audio.pause(); return; }
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      ctx = new AC(); const src = ctx.createMediaElementSource(audio);
+      analyser = ctx.createAnalyser(); analyser.fftSize = 512; data = new Uint8Array(analyser.fftSize);
+      src.connect(analyser); analyser.connect(ctx.destination);
+    }
+    await ctx.resume();
+    audio.currentTime = audio.ended ? 0 : audio.currentTime; satz = -1;
+    audio.play(); btn.querySelector('span').textContent = 'Pause';
+    cancelAnimationFrame(raf); loop();
+  });
+  audio.addEventListener('pause', () => { btn.querySelector('span').textContent = audio.ended ? 'Nochmal hören' : 'Weiter hören'; orbBox.style.setProperty('--s', 1); window.__lvl = 0; });
+
+  // Live-Zahlen (aktualisiert jeden Abend)
+  fetch('stats.json?' + Date.now()).then(r => r.json()).then(z => {
+    document.querySelectorAll('[data-k]').forEach(el => {
+      const ziel = z[el.dataset.k] || 0, start = performance.now();
+      const step = (t) => { const p = Math.min(1, (t - start) / 1400); el.textContent = Math.round(ziel * (1 - Math.pow(1 - p, 3))).toLocaleString('de-DE'); if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    });
+    document.getElementById('stand').textContent = 'Stand: ' + z.stand;
+  }).catch(() => {});
+
+  // Partikel um die Kugel
+  const cv = document.getElementById('partikel'), g = cv.getContext('2d');
+  let W, H, P = [];
+  function groesse() { const d = devicePixelRatio || 1; W = cv.clientWidth; H = cv.clientHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); }
+  groesse(); addEventListener('resize', groesse);
+  for (let i = 0; i < 70; i++) P.push({ a: Math.random() * 6.28, r: 120 + Math.random() * 170, v: (Math.random() * .4 + .1) * (Math.random() < .5 ? -1 : 1) / 100, s: Math.random() * 1.6 + .4, o: Math.random() * .6 + .2 });
+  function zeichnen() {
+    g.clearRect(0, 0, W, H);
+    const box = orbBox.getBoundingClientRect(), hb = cv.getBoundingClientRect();
+    const cx = box.left - hb.left + box.width / 2, cy = box.top - hb.top + box.height / 2, k = box.width / 280, lvl = window.__lvl || 0;
+    for (const p of P) {
+      p.a += p.v * (1 + lvl * 6);
+      const r = p.r * k * (1 + lvl * .25);
+      g.beginPath(); g.arc(cx + Math.cos(p.a) * r, cy + Math.sin(p.a) * r * .92, p.s, 0, 6.28);
+      g.fillStyle = `rgba(232,160,128,${p.o})`; g.fill();
+    }
+    requestAnimationFrame(zeichnen);
+  }
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) zeichnen();
+
+  // Abschnitte beim Scrollen einblenden
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
